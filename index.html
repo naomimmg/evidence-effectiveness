@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Evidence of Teaching Effectiveness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap">
+<style>
+  /* Layout: header, tab row, one panel per feedback source; tiles then a card grid. */
+  :root {
+    --bg: #f6f7f7; --panel: #ffffff; --fg: #1d2326; --muted: #5d676c; --line: #dfe3e4;
+    --track: #e9eeee; --accent: #1f6f78; --accent-soft: #d5e8ea;
+    --serif: "Source Serif 4", Georgia, "Times New Roman", serif;
+    --sans: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --bg: #121617; --panel: #1a2022; --fg: #e8eced; --muted: #9aa5a9; --line: #2c3437; --track: #263033; --accent: #5fb3bc; --accent-soft: #1f3a3d; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --bg: #121617; --panel: #1a2022; --fg: #e8eced; --muted: #9aa5a9; --line: #2c3437; --track: #263033; --accent: #5fb3bc; --accent-soft: #1f3a3d; color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.5; }
+  .wrap { max-width: 1180px; margin: 0 auto; padding-block: 40px 56px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; gap: 28px; }
+  header { display: flex; flex-direction: column; gap: 6px; }
+  .eyebrow { margin: 0; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+  h1 { margin: 0; font-family: var(--serif); font-weight: 400; font-size: clamp(30px, 4vw, 42px); line-height: 1.15; text-wrap: balance; }
+  .sub { margin: 0; color: var(--muted); font-size: 14px; }
+  .take { margin: 10px 0 0; max-width: 70ch; font-size: 17px; }
+  .take b, .intro b { font-weight: 600; font-variant-numeric: tabular-nums; }
+
+  .tabs { display: flex; flex-wrap: wrap; gap: 8px 32px; }
+  .tab-group { display: flex; flex-direction: column; gap: 4px; border-bottom: 1px solid var(--line); min-width: 0; }
+  .group-label { font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding-left: 14px; }
+  .group-tabs { display: flex; flex-wrap: wrap; gap: 4px; }
+  .tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 14px; font: inherit; font-size: 15px; color: var(--muted); cursor: pointer; }
+  .tab:hover { color: var(--fg); }
+  .tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); font-weight: 600; }
+  .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+
+  .panel { display: flex; flex-direction: column; gap: 18px; }
+  .intro { margin: 0; max-width: 75ch; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr)); gap: 14px; }
+  .tile { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px; }
+  .num { font-family: var(--serif); font-size: 36px; line-height: 1.1; font-variant-numeric: tabular-nums lining-nums; }
+  .tile-label { color: var(--muted); font-size: 14px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 360px), 1fr)); gap: 14px; }
+  .card { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .card h3 { margin: 0; font-size: 17px; font-weight: 600; }
+  .note { margin: 0; color: var(--muted); font-size: 13px; }
+
+  .bars { position: relative; }
+  .bar-row { display: flex; flex-direction: column; gap: 3px; padding: 4px 0; }
+  .bar-top { display: flex; justify-content: space-between; gap: 10px; font-size: 14px; }
+  .bar-label { min-width: 0; }
+  .bar-val { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .track { height: 10px; border-radius: 3px; background: var(--track); overflow: hidden; }
+  .fill { height: 100%; border-radius: 3px; background: var(--accent); }
+  .bar-row:hover .fill { filter: brightness(1.12); }
+
+  .dist { position: relative; }
+  .scale { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: 13px; }
+
+  .tip { position: absolute; pointer-events: none; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; box-shadow: 0 6px 18px rgba(0,0,0,.12); padding: 6px 10px; font-size: 13px; max-width: 16rem; z-index: 2; }
+  .tip-head { color: var(--muted); }
+
+  .quotes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+  .quotes li { margin: 0; padding-left: 14px; border-left: 2px solid var(--accent-soft); line-height: 1.55; max-width: 75ch; }
+  .quotes-wide { display: block; columns: 2 320px; column-gap: 32px; }
+  .quotes-wide li { break-inside: avoid; margin-bottom: 12px; }
+  footer { color: var(--muted); font-size: 13px; max-width: 85ch; border-top: 1px solid var(--line); padding-top: 16px; }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: no-preference) { .fill { transition: width .5s ease-out; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">Teaching dossier</p>
+    <h1>Evidence of teaching effectiveness</h1>
+    <p class="sub">Naomi Martinez Gutierrez · Course teaching and statistical consulting</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Feedback source">
+    <div class="tab-group">
+      <span class="group-label">PSYC 2021 Statistical Methods I · York University · Winter 2026 · Course director</span>
+      <div class="group-tabs">
+        <button class="tab" role="tab" data-tab="test1">After Test 1</button>
+        <button class="tab" role="tab" data-tab="test2">After Test 2</button>
+        <button class="tab" role="tab" data-tab="final">Final reflection</button>
+        <button class="tab" role="tab" data-tab="ai">Assignment 1: AI use</button>
+        <button class="tab" role="tab" data-tab="r">Assignment 2: learning R</button>
+      </div>
+    </div>
+    <div class="tab-group">
+      <span class="group-label">Statistical consulting · 2021–2025</span>
+      <div class="group-tabs">
+        <button class="tab" role="tab" data-tab="consult">Researcher feedback</button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="panel" id="test1">
+    <p class="intro">After the first test, students described which aspects of the course helped them learn most, and why.</p>
+    <div class="tiles">
+      <div class="tile"><div class="num" data-hl="test1:responses:n"></div><div class="tile-label">reflections coded</div></div>
+      <div class="tile"><div class="num" data-hl="test1:inclass:pct"></div><div class="tile-label">named the in-class questions as most helpful</div></div>
+      <div class="tile"><div class="num" data-hl="test1:retrieval:pct"></div><div class="tile-label">credited activities that made them practise recall</div></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>What helped most</h3><div class="bars" data-bars="test1:helped"></div></div>
+      <div class="card"><h3>How the helpful aspects work</h3><div class="bars" data-bars="test1:mechanism"></div></div>
+      <div class="card"><h3>In students' words</h3><ul class="quotes" data-quotes="test1"></ul></div>
+    </div>
+  </section>
+
+  <section class="panel" id="test2" hidden>
+    <p class="intro">After the second test, on hypothesis testing, students described what helped them understand it most, and why.</p>
+    <div class="tiles">
+      <div class="tile"><div class="num" data-hl="test2:responses:n"></div><div class="tile-label">reflections coded</div></div>
+      <div class="tile"><div class="num" data-hl="test2:inclass:pct"></div><div class="tile-label">named the in-class practice questions</div></div>
+      <div class="tile"><div class="num" data-hl="test2:visuals:pct"></div><div class="tile-label">named the visuals</div></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>What helped most</h3><div class="bars" data-bars="test2:helped"></div></div>
+      <div class="card"><h3>Why it helped</h3><div class="bars" data-bars="test2:why"></div></div>
+      <div class="card"><h3>In students' words</h3><ul class="quotes" data-quotes="test2"></ul></div>
+    </div>
+  </section>
+
+  <section class="panel" id="final" hidden>
+    <p class="intro">On the final exam, students reflected on whether their feelings toward statistics had changed since the first day and why, and on what they appreciated most about the course.</p>
+    <div class="tiles">
+      <div class="tile"><div class="num" data-hl="final:instructor:pct"></div><div class="tile-label">named the instructor's support and care as what they appreciated most, the top theme</div></div>
+      <div class="tile"><div class="num" data-hl="final:improved:pct"></div><div class="tile-label">said their feelings toward statistics improved</div></div>
+      <div class="tile"><div class="num"><span data-hl="final:anxious_positive:n"></span> of <span data-hl="final:anxious_positive:N"></span></div><div class="tile-label">students who began anxious ended comfortable, interested or confident</div></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>What students appreciated most</h3><div class="bars" data-bars="final:valued"></div></div>
+      <div class="card"><h3>Where anxious students ended up</h3><div class="bars" data-bars="final:anxious_end"></div></div>
+      <div class="card"><h3>In students' words</h3><ul class="quotes" data-quotes="final"></ul></div>
+    </div>
+  </section>
+
+  <section class="panel" id="ai" hidden>
+    <p class="intro">Generative AI was permitted on assignments, provided students fact-checked its output and reflected on how they used it. The first assignment asked students to reflect on how they used AI as a learning tool.</p>
+    <div class="tiles">
+      <div class="tile"><div class="num" data-hl="assignment1:responses:n"></div><div class="tile-label">reflections coded</div></div>
+      <div class="tile"><div class="num" data-hl="assignment1:fixR:pct"></div><div class="tile-label">used AI to troubleshoot their own R code</div></div>
+      <div class="tile"><div class="num" data-hl="assignment1:concepts:pct"></div><div class="tile-label">used AI to deepen their understanding of concepts or formulas</div></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>What students used it for</h3><div class="bars" data-bars="assignment1:uses"></div></div>
+      <div class="card"><h3>Which AI students used</h3><div class="bars" data-bars="assignment1:tools"></div></div>
+      <div class="card"><h3>In students' words</h3><ul class="quotes" data-quotes="a1"></ul></div>
+    </div>
+  </section>
+
+  <section class="panel" id="r" hidden>
+    <p class="intro">In the last assignment that used R, most students were coding for the first time (72% had no prior experience). They rated how valuable R was for conducting the analyses, from 1 to 5.</p>
+    <div class="tiles">
+      <div class="tile"><div class="num" data-hl="assignment2:value3plus:pct"></div><div class="tile-label">rated R 3 or higher for value</div></div>
+      <div class="tile"><div class="num" data-hl="assignment2:valued:pct"></div><div class="tile-label">rated R valuable (4 or 5)</div></div>
+      <div class="tile"><div class="num"><span data-hl="assignment2:hard_valued:n"></span> of <span data-hl="assignment2:hard_valued:N"></span></div><div class="tile-label">students who found R hard (4 or 5) still rated it valuable (4 or 5)</div></div>
+    </div>
+    <div class="grid">
+      <div class="card"><h3>How valuable was learning R?</h3><div class="dist" data-dist="assignment2:value"></div><div class="scale"><span>1 = not valuable at all</span><span>5 = extremely valuable</span></div></div>
+      <div class="card"><h3>In students' words</h3><ul class="quotes" data-quotes="a2"></ul></div>
+    </div>
+  </section>
+
+  <section class="panel" id="consult" hidden>
+    <p class="intro">Separate from PSYC 2021: graduate students and faculty consulted me on their own research through York's Statistical Consulting Service (2020–2025), and as a volunteer after that role ended.</p>
+    <div class="card"><h3>In clients' words</h3><ul class="quotes quotes-wide" data-quotes="consult"></ul></div>
+  </section>
+
+</div>
+
+<script>
+const DATA = {"test1": [{"chart": "headline", "label": "responses", "n": 74, "N": 74, "pct": 100}, {"chart": "headline", "label": "inclass", "n": 46, "N": 74, "pct": 62}, {"chart": "headline", "label": "retrieval", "n": 60, "N": 74, "pct": 81}, {"chart": "mechanism", "label": "Practising recall (practice test, in-class and textbook questions)", "n": 60, "N": 74, "pct": 81}, {"chart": "mechanism", "label": "Reviewing material (slides, readings, lectures, recordings)", "n": 33, "N": 74, "pct": 45}, {"chart": "mechanism", "label": "People (PASS, TA, instructor)", "n": 25, "N": 74, "pct": 34}, {"chart": "suggest", "label": "More practice outside class", "n": 15, "N": 74, "pct": 20}, {"chart": "suggest", "label": "Record or post lectures", "n": 10, "N": 74, "pct": 14}, {"chart": "suggest", "label": "More examples", "n": 9, "N": 74, "pct": 12}, {"chart": "suggest", "label": "More practice during class", "n": 6, "N": 74, "pct": 8}, {"chart": "suggest", "label": "More R support", "n": 6, "N": 74, "pct": 8}, {"chart": "suggest", "label": "More step-by-step calculations", "n": 6, "N": 74, "pct": 8}, {"chart": "suggest", "label": "More test information", "n": 6, "N": 74, "pct": 8}, {"chart": "suggest", "label": "More or more flexible PASS sessions", "n": 5, "N": 74, "pct": 7}, {"chart": "suggest", "label": "More interactive activities", "n": 5, "N": 74, "pct": 7}, {"chart": "suggest", "label": "Post the in-class questions", "n": 4, "N": 74, "pct": 5}, {"chart": "suggest", "label": "Improve slides", "n": 4, "N": 74, "pct": 5}, {"chart": "suggest", "label": "Harder practice questions", "n": 3, "N": 74, "pct": 4}, {"chart": "suggest", "label": "Graded homework", "n": 2, "N": 74, "pct": 3}, {"chart": "suggest", "label": "Simpler explanations", "n": 2, "N": 74, "pct": 3}, {"chart": "suggest", "label": "Videos of course content", "n": 2, "N": 74, "pct": 3}, {"chart": "suggest", "label": "Slower pace", "n": 1, "N": 74, "pct": 1}, {"chart": "helped", "label": "In-class questions (Vevox)", "n": 46, "N": 74, "pct": 62}, {"chart": "helped", "label": "Practice test", "n": 38, "N": 74, "pct": 51}, {"chart": "helped", "label": "Lecture slides", "n": 28, "N": 74, "pct": 38}, {"chart": "helped", "label": "Textbook readings", "n": 10, "N": 74, "pct": 14}, {"chart": "helped", "label": "Textbook questions", "n": 9, "N": 74, "pct": 12}], "test2": [{"chart": "headline", "label": "responses", "n": 58, "N": 58, "pct": 100}, {"chart": "headline", "label": "inclass", "n": 41, "N": 58, "pct": 71}, {"chart": "headline", "label": "visuals", "n": 26, "N": 58, "pct": 45}, {"chart": "headline", "label": "confused", "n": 21, "N": 58, "pct": 36}, {"chart": "why", "label": "Makes it concrete or easier to see", "n": 11, "N": 58, "pct": 19}, {"chart": "why", "label": "Active practice", "n": 8, "N": 58, "pct": 14}, {"chart": "why", "label": "Tests my own understanding", "n": 7, "N": 58, "pct": 12}, {"chart": "why", "label": "Step-by-step or concise", "n": 6, "N": 58, "pct": 10}, {"chart": "why", "label": "Fits how I learn", "n": 6, "N": 58, "pct": 10}, {"chart": "why", "label": "Builds confidence for the test", "n": 5, "N": 58, "pct": 9}, {"chart": "why", "label": "Can revisit on my own time", "n": 4, "N": 58, "pct": 7}, {"chart": "why", "label": "Helps me remember", "n": 3, "N": 58, "pct": 5}, {"chart": "why", "label": "Immediate feedback", "n": 2, "N": 58, "pct": 3}, {"chart": "why", "label": "Individual help", "n": 2, "N": 58, "pct": 3}, {"chart": "why", "label": "Keeps my attention", "n": 1, "N": 58, "pct": 2}, {"chart": "difficult", "label": "Effect sizes", "n": 22, "N": 58, "pct": 38}, {"chart": "difficult", "label": "Decision rules (reject or not)", "n": 17, "N": 58, "pct": 29}, {"chart": "difficult", "label": "Calculations and formulas", "n": 17, "N": 58, "pct": 29}, {"chart": "difficult", "label": "Terminology and notation", "n": 11, "N": 58, "pct": 19}, {"chart": "difficult", "label": "What results mean", "n": 10, "N": 58, "pct": 17}, {"chart": "difficult", "label": "Hypothesis testing overall", "n": 9, "N": 58, "pct": 16}, {"chart": "difficult", "label": "Choosing the test", "n": 8, "N": 58, "pct": 14}, {"chart": "difficult", "label": "Confidence intervals", "n": 5, "N": 58, "pct": 9}, {"chart": "difficult", "label": "Specific statistics", "n": 5, "N": 58, "pct": 9}, {"chart": "difficult", "label": "Power", "n": 4, "N": 58, "pct": 7}, {"chart": "difficult", "label": "Type I and II errors", "n": 2, "N": 58, "pct": 3}, {"chart": "difficult", "label": "Stating hypotheses", "n": 1, "N": 58, "pct": 2}, {"chart": "difficult", "label": "Nothing especially difficult", "n": 1, "N": 58, "pct": 2}, {"chart": "reason", "label": "Similar concepts get mixed up", "n": 21, "N": 58, "pct": 36}, {"chart": "reason", "label": "Too much to remember", "n": 17, "N": 58, "pct": 29}, {"chart": "reason", "label": "New to math or statistics", "n": 6, "N": 58, "pct": 10}, {"chart": "reason", "label": "Abstract or hard to apply", "n": 4, "N": 58, "pct": 7}, {"chart": "reason", "label": "Missed class", "n": 2, "N": 58, "pct": 3}, {"chart": "reason", "label": "An explanation was unclear", "n": 2, "N": 58, "pct": 3}, {"chart": "helped", "label": "In-class practice questions", "n": 41, "N": 58, "pct": 71}, {"chart": "helped", "label": "Visuals", "n": 26, "N": 58, "pct": 45}, {"chart": "helped", "label": "Slides and lectures", "n": 16, "N": 58, "pct": 28}, {"chart": "helped", "label": "Practice exams", "n": 6, "N": 58, "pct": 10}, {"chart": "helped", "label": "Textbook", "n": 4, "N": 58, "pct": 7}], "final": [{"chart": "headline", "label": "responses", "n": 42, "N": 42, "pct": 100}, {"chart": "headline", "label": "improved", "n": 29, "N": 42, "pct": 69}, {"chart": "headline", "label": "anxious_positive", "n": 14, "N": 19, "pct": 74}, {"chart": "change", "label": "Improved", "n": 29, "N": 42, "pct": 69}, {"chart": "change", "label": "Mixed or no clear change", "n": 10, "N": 42, "pct": 24}, {"chart": "change", "label": "Worsened", "n": 3, "N": 42, "pct": 7}, {"chart": "headline", "label": "instructor", "n": 19, "N": 42, "pct": 45}, {"chart": "valued", "label": "Instructor support and care", "n": 19, "N": 42, "pct": 45}, {"chart": "valued", "label": "Teaching quality and clarity", "n": 10, "N": 42, "pct": 24}, {"chart": "valued", "label": "Practice opportunities", "n": 10, "N": 42, "pct": 24}, {"chart": "valued", "label": "Learning resources", "n": 8, "N": 42, "pct": 19}, {"chart": "valued", "label": "Assessment design", "n": 6, "N": 42, "pct": 14}, {"chart": "valued", "label": "Learning R", "n": 6, "N": 42, "pct": 14}, {"chart": "valued", "label": "Content and its relevance", "n": 6, "N": 42, "pct": 14}, {"chart": "anxious_end", "label": "Comfortable", "n": 5, "N": 19, "pct": 26}, {"chart": "anxious_end", "label": "Enjoys it or is interested", "n": 5, "N": 19, "pct": 26}, {"chart": "anxious_end", "label": "Confident", "n": 4, "N": 19, "pct": 21}, {"chart": "anxious_end", "label": "Mixed", "n": 4, "N": 19, "pct": 21}, {"chart": "anxious_end", "label": "Finds it hard", "n": 1, "N": 19, "pct": 5}], "assignment1": [{"chart": "headline", "label": "responses", "n": 60, "N": 60, "pct": 100}, {"chart": "headline", "label": "chatgpt", "n": 38, "N": 60, "pct": 63}, {"chart": "headline", "label": "checked", "n": 16, "N": 60, "pct": 27}, {"chart": "tools", "label": "ChatGPT", "n": 38, "N": 60, "pct": 63}, {"chart": "tools", "label": "Gemini or Google AI Overview", "n": 6, "N": 60, "pct": 10}, {"chart": "tools", "label": "Perplexity", "n": 2, "N": 60, "pct": 3}, {"chart": "tools", "label": "DeepSeek", "n": 2, "N": 60, "pct": 3}, {"chart": "tools", "label": "Microsoft Copilot", "n": 1, "N": 60, "pct": 2}, {"chart": "tools", "label": "Claude", "n": 1, "N": 60, "pct": 2}, {"chart": "tools", "label": "Did not use AI", "n": 3, "N": 60, "pct": 5}, {"chart": "headline", "label": "concepts", "n": 19, "N": 52, "pct": 37}, {"chart": "headline", "label": "fixR", "n": 39, "N": 52, "pct": 75}, {"chart": "uses", "label": "Fixing R code errors", "n": 39, "N": 52, "pct": 75}, {"chart": "uses", "label": "Understanding concepts or formulas", "n": 19, "N": 52, "pct": 37}, {"chart": "uses", "label": "Double-checking work they had done themselves", "n": 13, "N": 52, "pct": 25}], "assignment2": [{"chart": "headline", "label": "responses", "n": 59, "N": 59, "pct": 100}, {"chart": "headline", "label": "valued", "n": 43, "N": 59, "pct": 73}, {"chart": "headline", "label": "hard", "n": 31, "N": 59, "pct": 53}, {"chart": "headline", "label": "hard_valued", "n": 18, "N": 31, "pct": 58}, {"chart": "r_difficulty", "label": "1", "n": 0, "N": 59, "pct": 0}, {"chart": "r_difficulty", "label": "2", "n": 4, "N": 59, "pct": 7}, {"chart": "r_difficulty", "label": "3", "n": 24, "N": 59, "pct": 41}, {"chart": "r_difficulty", "label": "4", "n": 21, "N": 59, "pct": 36}, {"chart": "r_difficulty", "label": "5", "n": 10, "N": 59, "pct": 17}, {"chart": "rmd_difficulty", "label": "1", "n": 6, "N": 58, "pct": 10}, {"chart": "rmd_difficulty", "label": "2", "n": 7, "N": 58, "pct": 12}, {"chart": "rmd_difficulty", "label": "3", "n": 14, "N": 58, "pct": 24}, {"chart": "rmd_difficulty", "label": "4", "n": 21, "N": 58, "pct": 36}, {"chart": "rmd_difficulty", "label": "5", "n": 10, "N": 58, "pct": 17}, {"chart": "value", "label": "1", "n": 1, "N": 59, "pct": 2}, {"chart": "value", "label": "2", "n": 1, "N": 59, "pct": 2}, {"chart": "value", "label": "3", "n": 14, "N": 59, "pct": 24}, {"chart": "value", "label": "4", "n": 23, "N": 59, "pct": 39}, {"chart": "value", "label": "5", "n": 20, "N": 59, "pct": 34}, {"chart": "headline", "label": "value3plus", "n": 57, "N": 59, "pct": 97}], "consulting": [{"chart": "headline", "label": "clients", "n": 21, "N": 21, "pct": 100}, {"chart": "headline", "label": "first_year", "n": 2021, "N": null, "pct": null}, {"chart": "headline", "label": "last_year", "n": 2025, "N": null, "pct": null}, {"chart": "methods", "label": "Multilevel and mixed models", "n": 9, "N": 21, "pct": 43}, {"chart": "methods", "label": "SEM, path analysis and mediation", "n": 5, "N": 21, "pct": 24}, {"chart": "methods", "label": "Regression, ANOVA and MANOVA", "n": 5, "N": 21, "pct": 24}, {"chart": "methods", "label": "Power and small samples", "n": 3, "N": 21, "pct": 14}, {"chart": "methods", "label": "Factor analysis", "n": 2, "N": 21, "pct": 10}, {"chart": "methods", "label": "Learning R", "n": 1, "N": 21, "pct": 5}, {"chart": "methods", "label": "Not specified", "n": 1, "N": 21, "pct": 5}], "comments": [{"group": "test1", "quote": "In class questions, because there is explanation right after and it happens every lecture. Good exercise for me to check if I really understand the concept or not."}, {"group": "test1", "quote": "The vevox (quiz/participation questions) have really helped me keep engaged with material and solidifying the concepts during class."}, {"group": "test1", "quote": "I would say in-class questions helped most, as it's more engaging for me to answer questions with others and compare how correct I am compared to other students."}, {"group": "test1", "quote": "Textbook questions. It allows me to ensure I'm not passively reading."}, {"group": "test1", "quote": "The practice test… not only did it help me prepare for what questions might be on the test, but also helped mentally prepare me for how the test would look."}, {"group": "test2", "quote": "In class, I find the in class practice really helpful; it helps solidify my understanding because just listening to a definition sometimes isn't enough."}, {"group": "test2", "quote": "The practice questions helped most in my understanding because it allowed me to truly see if I understood the concept or which areas I was struggling in."}, {"group": "test2", "quote": "Visuals – I initially was confused \"P-value\" \"t-value\", not sure which one is the sample's, which one is critical. Visual helps me understand."}, {"group": "final", "quote": "On the first day I was quite worried. I'm not very good at math and I usually hate anything to do with numbers. But this course made statistics fun. I found the topics very approachable with how they were taught."}, {"group": "final", "quote": "I was nervous to take stats as I anticipated extremely difficult tasks but the lectures were done in a way where information was digestible. My feelings have changed, I enjoyed the class."}, {"group": "final", "quote": "I most appreciated the free textbook & the practice q's for each lesson - I appreciate that you as a prof think about your students in a way most don't."}, {"group": "final", "quote": "I frequently was confused in the past by p values and other specific numbers appearing in papers, but now I believe that I will more clearly and enjoyably be able to read the contents of published papers."}, {"group": "final", "quote": "I appreciated our professor's belief in us and our ability to learn. Optimism doesn't go unnoticed :)"}, {"group": "a1", "quote": "In the case of R scripts in particular I find that the risk of AI misinformation or hallucination is mitigated by the ease with which I can check the answers provided by simply running a given command in Rstudio."}, {"group": "a1", "quote": "I found that AI is helpful for solving technical difficulties, but you cannot blindly copy and paste every line of code into RStudio."}, {"group": "a1", "quote": "I find AI useful when working with R as it doesn't just give code but explains what each piece of the code does and why it is important. Coming out of this assignment I feel confident in my ability to explain the purpose and function of each piece of my R project."}, {"group": "a2", "quote": "Very scary looking at first as I have no experience with coding and such. Making tiny mistakes was also annoying but I feel like you get the hang of it as you do it more and more."}, {"group": "a2", "quote": "I decided not to rate it a 5 because the weekly R exercises helped me practice and become less overwhelmed and intimidated."}, {"group": "a2", "quote": "RStudio was a great but rather complicated platform to work with and learn to code on, it taught me so many things and put into perspective many of the statistical concepts covered in lectures."}, {"group": "a2", "quote": "I overall really enjoyed using R Studio throughout the semester and will definitely be putting it as a skill on my resume!!"}, {"group": "consult", "quote": "She has gone beyond and above her role of teaching and consultation in helping me how to use R. With her incredible support, I have learned the basics of R software. She has helped me to correctly measure my variables and how to use R and analyze my data. Without this consulting service and, especially, without Professor Naomi's significant help and support, I would not succeed in my current graduate course."}, {"group": "consult", "quote": "Thank you for your explanation, Naomi. That all makes sense to me. I'm glad to say that this analysis portion of my thesis is now done. Thank you so much for taking the time to discuss this analysis with me. I learned a lot."}, {"group": "consult", "quote": "Thanks for your explanation on the mutual suppression in the model. I see that mutual suppression reveals the true relationship between predictor and outcome."}, {"group": "consult", "quote": "Thank you so much for sending the code yesterday. It worked perfectly, and the results are in line with what I would expect from the literature."}, {"group": "consult", "quote": "I looked at the tutorial you sent, it was quite helpful!"}, {"group": "consult", "quote": "Thank you again for your willingness to meet with me even though you are no longer with SCS!"}]};
+const fmt = (v) => Number(v).toLocaleString('en-CA');
+const TABS = ['test1', 'test2', 'final', 'ai', 'r', 'consult'];
+
+function rowsOf(src, chart) { return (DATA[src] || []).filter((r) => r.chart === chart); }
+function headline(src, label) { return (DATA[src] || []).find((r) => r.chart === 'headline' && r.label === label); }
+
+function fillHeadlines(root) {
+  root.querySelectorAll('[data-hl]').forEach((el) => {
+    const [src, label, field] = el.dataset.hl.split(':');
+    const r = headline(src, label);
+    if (!r || r[field] == null) { el.textContent = '—'; return; }
+    const v = Number(r[field]);
+    el.textContent = field === 'pct' ? `${v}%` : (/_year$/.test(label) ? String(v) : fmt(v));
+  });
+}
+
+function tipFor(host) {
+  let tip = host.querySelector(':scope > .tip');
+  if (!tip) { tip = document.createElement('div'); tip.className = 'tip'; tip.hidden = true; host.appendChild(tip); }
+  return tip;
+}
+function showTip(host, tip, ev, head, body) {
+  const box = host.getBoundingClientRect();
+  tip.replaceChildren();
+  const h = document.createElement('div'); h.className = 'tip-head'; h.textContent = head;
+  const b = document.createElement('div'); b.textContent = body;
+  tip.append(h, b); tip.hidden = false;
+  tip.style.left = `${Math.max(0, Math.min(ev.clientX - box.left + 12, box.width - tip.offsetWidth))}px`;
+  tip.style.top = `${ev.clientY - box.top + 12}px`;
+}
+
+function drawBars(el) {
+  const [src, chart] = el.dataset.bars.split(':');
+  const rows = rowsOf(src, chart);
+  const max = Math.max(1, ...rows.map((r) => Number(r.pct)));
+  el.replaceChildren();
+  const tip = tipFor(el);
+  rows.forEach((r) => {
+    const row = document.createElement('div'); row.className = 'bar-row';
+    const top = document.createElement('div'); top.className = 'bar-top';
+    const lab = document.createElement('span'); lab.className = 'bar-label'; lab.textContent = r.label;
+    const val = document.createElement('span'); val.className = 'bar-val'; val.textContent = `${fmt(Number(r.n))} · ${Number(r.pct)}%`;
+    top.append(lab, val);
+    const track = document.createElement('div'); track.className = 'track';
+    const fill = document.createElement('div'); fill.className = 'fill'; fill.style.width = `${(Number(r.pct) / max) * 100}%`;
+    track.appendChild(fill);
+    row.append(top, track);
+    row.addEventListener('mousemove', (ev) => showTip(el, tip, ev, r.label, `${fmt(Number(r.n))} of ${fmt(Number(r.N))} (${Number(r.pct)}%)`));
+    row.addEventListener('mouseleave', () => { tip.hidden = true; });
+    el.appendChild(row);
+  });
+  el.appendChild(tip);
+}
+
+function drawDist(el) {
+  const [src, chart] = el.dataset.dist.split(':');
+  const rows = rowsOf(src, chart).map((r) => ({ ...r, n: Number(r.n), N: Number(r.N), pct: Number(r.pct) }));
+  const NS = 'http://www.w3.org/2000/svg';
+  const W = Math.max(260, el.clientWidth || 320), H = 220, m = { top: 10, right: 6, bottom: 28, left: 52 };
+  const iw = W - m.left - m.right, ih = H - m.top - m.bottom;
+  const top = Math.max(5, Math.ceil(Math.max(...rows.map((r) => r.n)) / 5) * 5);
+  const y = (v) => m.top + ih - (v / top) * ih;
+  const band = iw / rows.length, bw = Math.min(40, band * 0.6);
+  const mk = (tag, attrs, parent) => { const n = document.createElementNS(NS, tag); for (const k in attrs) n.setAttribute(k, attrs[k]); (parent || svg).appendChild(n); return n; };
+  el.replaceChildren();
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`); svg.setAttribute('width', '100%'); svg.setAttribute('role', 'img');
+  svg.style.display = 'block'; svg.style.overflow = 'visible';
+  for (let v = 0; v <= top; v += 5) {
+    mk('line', { x1: m.left, x2: W - m.right, y1: y(v), y2: y(v), stroke: 'var(--line)', 'stroke-width': 1 });
+    const tx = mk('text', { x: m.left - 8, y: y(v), 'text-anchor': 'end', 'dominant-baseline': 'middle', fill: 'var(--muted)', 'font-size': 12 });
+    tx.textContent = v; tx.style.fontVariantNumeric = 'tabular-nums';
+  }
+  const yt = mk('text', { x: 0, y: 0, transform: `translate(14 ${m.top + ih / 2}) rotate(-90)`, 'text-anchor': 'middle', fill: 'var(--muted)', 'font-size': 12 });
+  yt.textContent = 'Number of students';
+  const tip = tipFor(el);
+  rows.forEach((r, i) => {
+    const cx = m.left + band * i + band / 2;
+    mk('rect', { x: cx - bw / 2, y: y(r.n), width: bw, height: Math.max(0, m.top + ih - y(r.n)), rx: 3, fill: 'var(--accent)' });
+    const lx = mk('text', { x: cx, y: H - 8, 'text-anchor': 'middle', fill: 'var(--muted)', 'font-size': 13 }); lx.textContent = r.label;
+    const hit = mk('rect', { x: m.left + band * i, y: m.top, width: band, height: ih, fill: 'transparent' });
+    hit.addEventListener('mousemove', (ev) => showTip(el, tip, ev, `Rating ${r.label}`, `${fmt(r.n)} of ${fmt(r.N)} students (${r.pct}%)`));
+    hit.addEventListener('mouseleave', () => { tip.hidden = true; });
+  });
+  el.append(svg, tip);
+}
+
+function drawQuotes(el) {
+  el.replaceChildren();
+  (DATA.comments || []).filter((q) => q.group === el.dataset.quotes).forEach((q) => {
+    const li = document.createElement('li'); li.textContent = `“${q.quote}”`; el.appendChild(li);
+  });
+}
+
+function drawPanel(p) {
+  fillHeadlines(p);
+  p.querySelectorAll('[data-bars]').forEach(drawBars);
+  p.querySelectorAll('[data-dist]').forEach(drawDist);
+  p.querySelectorAll('[data-quotes]').forEach(drawQuotes);
+}
+
+function showTab(name, push) {
+  const target = TABS.includes(name) ? name : 'test1';
+  document.querySelectorAll('.panel').forEach((p) => { p.hidden = p.id !== target; });
+  document.querySelectorAll('.tab').forEach((b) => { b.setAttribute('aria-selected', b.dataset.tab === target ? 'true' : 'false'); });
+  drawPanel(document.getElementById(target));
+  if (push && location.hash.slice(1) !== target) history.replaceState(null, '', `#${target}`);
+}
+
+
+document.querySelectorAll('.tab').forEach((b) => b.addEventListener('click', () => showTab(b.dataset.tab, true)));
+window.addEventListener('hashchange', () => showTab(location.hash.slice(1)));
+let rz; window.addEventListener('resize', () => { clearTimeout(rz); rz = setTimeout(() => { const p = document.querySelector('.panel:not([hidden])'); if (p) p.querySelectorAll('[data-dist]').forEach(drawDist); }, 150); });
+showTab(location.hash.slice(1));
+</script>
+</body>
+</html>
