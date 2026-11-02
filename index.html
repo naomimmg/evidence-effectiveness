@@ -230,7 +230,6 @@ function showTip(host, tip, ev, head, body) {
 function drawBars(el) {
   const [src, chart] = el.dataset.bars.split(':');
   const rows = rowsOf(src, chart);
-  const max = Math.max(1, ...rows.map((r) => Number(r.pct)));
   el.replaceChildren();
   const tip = tipFor(el);
   rows.forEach((r) => {
@@ -240,7 +239,7 @@ function drawBars(el) {
     const val = document.createElement('span'); val.className = 'bar-val'; val.textContent = `${fmt(Number(r.n))} · ${Number(r.pct)}%`;
     top.append(lab, val);
     const track = document.createElement('div'); track.className = 'track';
-    const fill = document.createElement('div'); fill.className = 'fill'; fill.style.width = `${(Number(r.pct) / max) * 100}%`;
+    const fill = document.createElement('div'); fill.className = 'fill'; fill.style.width = `${Math.min(100, Number(r.pct))}%`;
     track.appendChild(fill);
     row.append(top, track);
     row.addEventListener('mousemove', (ev) => showTip(el, tip, ev, r.label, `${fmt(Number(r.n))} of ${fmt(Number(r.N))} (${Number(r.pct)}%)`));
